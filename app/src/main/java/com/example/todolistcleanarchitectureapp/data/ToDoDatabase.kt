@@ -11,7 +11,7 @@ import androidx.room.TypeConverters
 abstract class ToDoDatabase:RoomDatabase() {
 
     abstract fun todoDao():ToDoDao
-    
+
     companion object{
         @Volatile
         private var INSTANCE:ToDoDatabase? = null
