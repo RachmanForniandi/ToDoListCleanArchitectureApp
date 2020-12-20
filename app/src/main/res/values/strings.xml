@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ToDoListCleanArchitectureApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_data">No Data</string>
+    <string name="image_no_data">Image No Data</string>
+    <string name="float_action_button_add_data">Float Action Button Add Data</string>
 </resources>
