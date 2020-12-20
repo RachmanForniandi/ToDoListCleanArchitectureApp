@@ -5,4 +5,12 @@
     <string name="no_data">No Data</string>
     <string name="image_no_data">Image No Data</string>
     <string name="float_action_button_add_data">Float Action Button Add Data</string>
+    <string name="title">title</string>
+    <string name="description">description</string>
+
+    <string-array name="priorities">
+        <item>High Priority</item>
+        <item>Medium Priority</item>
+        <item>Low Priority</item>
+    </string-array>
 </resources>
