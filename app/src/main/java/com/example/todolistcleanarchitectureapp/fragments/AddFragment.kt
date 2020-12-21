@@ -14,6 +14,7 @@ import com.example.todolistcleanarchitectureapp.data.ToDoData
 import com.example.todolistcleanarchitectureapp.data.viewModel.SharedViewModel
 import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
 import kotlinx.android.synthetic.main.fragment_add.*
+import kotlinx.android.synthetic.main.fragment_add.view.*
 
 
 class AddFragment : Fragment() {
@@ -27,7 +28,10 @@ class AddFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view =inflater.inflate(R.layout.fragment_add, container, false)
+
         setHasOptionsMenu(true)
+
+        view.sp_priority.onItemSelectedListener = sharedViewModel.listener
 
         return view
     }
