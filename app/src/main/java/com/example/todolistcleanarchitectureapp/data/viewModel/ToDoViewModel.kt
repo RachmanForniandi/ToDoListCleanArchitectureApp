@@ -29,6 +29,12 @@ class ToDoViewModel(application: Application):AndroidViewModel(application) {
         }
     }
 
+    fun updateData(toDoData: ToDoData){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.updateData(toDoData)
+        }
+    }
+
 
 
 }
