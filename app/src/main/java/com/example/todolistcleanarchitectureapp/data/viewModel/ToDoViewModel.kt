@@ -35,6 +35,11 @@ class ToDoViewModel(application: Application):AndroidViewModel(application) {
         }
     }
 
+    fun deleteData(toDoData: ToDoData){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.deleteData(toDoData)
+        }
+    }
 
 
 }

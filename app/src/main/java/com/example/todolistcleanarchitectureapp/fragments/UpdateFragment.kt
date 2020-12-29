@@ -1,5 +1,6 @@
 package com.example.todolistcleanarchitectureapp.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -44,9 +45,9 @@ class UpdateFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        if (item.itemId== R.id.menu_save){
-            updateDataItem()
+        when (item.itemId){
+                R.id.menu_save-> updateDataItem()
+                R.id.menu_delete-> deleteDataItem()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -71,5 +72,22 @@ class UpdateFragment : Fragment() {
         }
     }
 
-
+    private fun deleteDataItem() {
+        Toast.makeText(requireContext(),"test Delete",Toast.LENGTH_SHORT).show()
+        
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Yes") { _, _ ->
+            mTodoViewModel.deleteData(args.currentItem)
+            Toast.makeText(
+                    requireContext(),
+                    "Successfully Deleted: ${args.currentItem.title}",
+                    Toast.LENGTH_SHORT
+            ).show()
+            findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+        }
+        builder.setNegativeButton("No") { _, _ -> }
+        builder.setTitle("Delete '${args.currentItem.title}'?")
+        builder.setMessage("Are you sure you want to remove '${args.currentItem.title}'?")
+        builder.create().show()
+    }
 }
