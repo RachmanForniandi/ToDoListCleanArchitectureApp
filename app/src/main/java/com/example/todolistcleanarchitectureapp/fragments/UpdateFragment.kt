@@ -74,7 +74,7 @@ class UpdateFragment : Fragment() {
 
     private fun deleteDataItem() {
         Toast.makeText(requireContext(),"test Delete",Toast.LENGTH_SHORT).show()
-        
+
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->
             mTodoViewModel.deleteData(args.currentItem)

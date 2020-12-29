@@ -13,11 +13,11 @@ interface ToDoDao {
     suspend fun insertDataTask(toDoData: ToDoData)
 
     @Update
-    suspend fun updateData(toDoData: ToDoData)
+    suspend fun updateDataTask(toDoData: ToDoData)
 
     @Delete
     suspend fun deleteDataTask(toDoData: ToDoData)
 
     @Query("DELETE FROM todo_table")
-    suspend fun deleteAll()
+    suspend fun deleteAllTask()
 }
