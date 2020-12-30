@@ -14,6 +14,7 @@ import com.example.todolistcleanarchitectureapp.R
 import com.example.todolistcleanarchitectureapp.adapter.ListToDoAdapter
 import com.example.todolistcleanarchitectureapp.data.viewModel.SharedViewModel
 import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
+import com.example.todolistcleanarchitectureapp.databinding.FragmentListBinding
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.view.*
 
@@ -22,6 +23,9 @@ class ListFragment : Fragment() {
     private val toDoViewModel:ToDoViewModel by viewModels()
     private val sharedViewModel:SharedViewModel by viewModels()
 
+    private var fragmentListBinding:FragmentListBinding? = null
+    private val binding get() = fragmentListBinding
+
     private val listToDoAdapter:ListToDoAdapter by lazy { ListToDoAdapter() }
 
     override fun onCreateView(
@@ -29,10 +33,11 @@ class ListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =inflater.inflate(R.layout.fragment_list, container, false)
+        fragmentListBinding = FragmentListBinding.inflate(inflater, container, false)
+        binding?.lifecycleOwner = this
+        binding?.sharedViewModel = sharedViewModel
+        displayDataRecyclerView()
 
-        val rvToDo = view.list_todo_data
-        rvToDo.adapter = listToDoAdapter
         //rvToDo.layoutManager = LinearLayoutManager(requireActivity())
 
         toDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
@@ -41,23 +46,28 @@ class ListFragment : Fragment() {
             listToDoAdapter.setData(data)
         })
 
-        sharedViewModel.emptyDb.observe(viewLifecycleOwner, Observer {
+        /*sharedViewModel.emptyDb.observe(viewLifecycleOwner, Observer {
             showEmptyDatabaseViews(it)
-        })
-        view.fab_add_data.setOnClickListener {
+        })*/
+        /*view.fab_add_data.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
-        }
+        }*/
 
         /*view.layout_list_todo.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_updateFragment)
         }*/
 
         setHasOptionsMenu(true)
-        return view
+        return binding?.root
 
     }
 
-    private fun showEmptyDatabaseViews(emptyData:Boolean) {
+    private fun displayDataRecyclerView() {
+        val rvToDo = binding?.listTodoData
+        rvToDo?.adapter = listToDoAdapter
+    }
+
+    /*private fun showEmptyDatabaseViews(emptyData:Boolean) {
         if (emptyData){
             view?.img_view_no_data?.visibility = View.VISIBLE
             view?.tv_no_data?.visibility = View.VISIBLE
@@ -65,7 +75,7 @@ class ListFragment : Fragment() {
             view?.img_view_no_data?.visibility = View.INVISIBLE
             view?.tv_no_data?.visibility = View.INVISIBLE
         }
-    }
+    }*/
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu,menu)
@@ -94,6 +104,11 @@ class ListFragment : Fragment() {
         builder.setTitle("Delete everything ?")
         builder.setMessage("Are you sure you want to delete all data ?")
         builder.create().show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentListBinding = null
     }
 
 }

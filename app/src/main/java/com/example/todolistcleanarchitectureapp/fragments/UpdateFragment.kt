@@ -13,6 +13,7 @@ import com.example.todolistcleanarchitectureapp.data.Priority
 import com.example.todolistcleanarchitectureapp.data.ToDoData
 import com.example.todolistcleanarchitectureapp.data.viewModel.SharedViewModel
 import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
+import com.example.todolistcleanarchitectureapp.databinding.FragmentUpdateBinding
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_update.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
@@ -24,20 +25,25 @@ class UpdateFragment : Fragment() {
     private val mSharedViewModel:SharedViewModel by viewModels()
     private val mTodoViewModel:ToDoViewModel by viewModels()
 
+    private var fragmentUpdateBinding:FragmentUpdateBinding?= null
+    private val binding get() = fragmentUpdateBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =inflater.inflate(R.layout.fragment_update, container, false)
+        fragmentUpdateBinding = FragmentUpdateBinding.inflate(inflater, container, false)
+        //val view =inflater.inflate(R.layout.fragment_update, container, false)
+        binding?.argsUpdate = args
         setHasOptionsMenu(true)
 
-        view.update_et_title.setText(args.currentItem.title)
+       /* fragmentUpdateBinding.updateEtTitle.setText(args.currentItem.title)
         view.update_et_description_multiline.setText(args.currentItem.description)
-        view.update_sp_priority.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
-        view.update_sp_priority.onItemSelectedListener = mSharedViewModel.listener
+        view.update_sp_priority.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))*/
+        binding?.updateSpPriority?.onItemSelectedListener = mSharedViewModel.listener
 
-        return view
+        return binding?.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -89,5 +95,10 @@ class UpdateFragment : Fragment() {
         builder.setTitle("Delete '${args.currentItem.title}'?")
         builder.setMessage("Are you sure you want to remove '${args.currentItem.title}'?")
         builder.create().show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentUpdateBinding = null
     }
 }
