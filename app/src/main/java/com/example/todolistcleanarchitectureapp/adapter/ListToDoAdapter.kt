@@ -10,28 +10,43 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistcleanarchitectureapp.R
 import com.example.todolistcleanarchitectureapp.data.Priority
 import com.example.todolistcleanarchitectureapp.data.ToDoData
+import com.example.todolistcleanarchitectureapp.databinding.ItemToDoBinding
 import com.example.todolistcleanarchitectureapp.fragments.ListFragmentDirections
 import kotlinx.android.synthetic.main.item_to_do.view.*
 
 class ListToDoAdapter:RecyclerView.Adapter<ListToDoAdapter.ListToDoHolder>() {
 
-    var dataToDoList = emptyList<ToDoData>()
+    private var dataToDoList = emptyList<ToDoData>()
 
+    class ListToDoHolder (private val binding:ItemToDoBinding):RecyclerView.ViewHolder(binding.root){
+        fun bind(toData: ToDoData){
+            binding.toDoData = toData
+            binding.executePendingBindings()
+        }
+
+        companion object{
+            fun from(parent: ViewGroup):ListToDoHolder{
+                val binding = ItemToDoBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+                return ListToDoHolder(binding)
+            }
+        }
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListToDoHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_to_do,parent,false)
-        return ListToDoHolder(view)
+
+        return ListToDoHolder.from(parent)
     }
     override fun getItemCount(): Int {
         return dataToDoList.size
     }
     override fun onBindViewHolder(holder: ListToDoHolder, position: Int) {
         val item = dataToDoList[position]
-        holder.itemView.title_txt.text = item.title
+        /*holder.itemView.title_txt.text = item.title
         holder.itemView.description_txt.text = item.description
         holder.itemView.row_background.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToUpdateFragment(item)
             holder.itemView.findNavController().navigate(action)
-        }
+        }*/
+        holder.bind(item)
 
         when(item.priority){
             Priority.HIGH -> holder.itemView.priority_indicator.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.red))
@@ -41,14 +56,10 @@ class ListToDoAdapter:RecyclerView.Adapter<ListToDoAdapter.ListToDoHolder>() {
         }
 
     }
+
     fun setData(toData:List<ToDoData>){
         this.dataToDoList = toData
         notifyDataSetChanged()
-    }
-
-
-    class ListToDoHolder (itemView:View):RecyclerView.ViewHolder(itemView){
-
     }
 
 }
