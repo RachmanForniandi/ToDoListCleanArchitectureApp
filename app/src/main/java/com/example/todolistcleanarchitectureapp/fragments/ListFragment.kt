@@ -3,20 +3,19 @@ package com.example.todolistcleanarchitectureapp.fragments
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
-import android.widget.ListAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistcleanarchitectureapp.R
 import com.example.todolistcleanarchitectureapp.adapter.ListToDoAdapter
+import com.example.todolistcleanarchitectureapp.data.ToDoData
 import com.example.todolistcleanarchitectureapp.data.viewModel.SharedViewModel
 import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
 import com.example.todolistcleanarchitectureapp.databinding.FragmentListBinding
-import kotlinx.android.synthetic.main.fragment_list.*
-import kotlinx.android.synthetic.main.fragment_list.view.*
+import com.example.todolistcleanarchitectureapp.utility.SwipeToDelete
+import com.google.android.material.snackbar.Snackbar
 
 class ListFragment : Fragment() {
 
@@ -38,14 +37,13 @@ class ListFragment : Fragment() {
         binding?.sharedViewModel = sharedViewModel
         displayDataRecyclerView()
 
-        //rvToDo.layoutManager = LinearLayoutManager(requireActivity())
 
-        toDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
+
+        toDoViewModel.getAllData.observe(viewLifecycleOwner, {
             data ->
             sharedViewModel.checkIfDatabaseEmpty(data)
             listToDoAdapter.setData(data)
         })
-
         /*sharedViewModel.emptyDb.observe(viewLifecycleOwner, Observer {
             showEmptyDatabaseViews(it)
         })*/
@@ -64,21 +62,37 @@ class ListFragment : Fragment() {
 
     private fun displayDataRecyclerView() {
         val rvToDo = binding?.listTodoData
+        //rvToDo.layoutManager = LinearLayoutManager(requireActivity())
         rvToDo?.adapter = listToDoAdapter
+
+        rvToDo?.let { swipeToDelete(it) }
     }
 
-    /*private fun showEmptyDatabaseViews(emptyData:Boolean) {
-        if (emptyData){
-            view?.img_view_no_data?.visibility = View.VISIBLE
-            view?.tv_no_data?.visibility = View.VISIBLE
-        }else{
-            view?.img_view_no_data?.visibility = View.INVISIBLE
-            view?.tv_no_data?.visibility = View.INVISIBLE
+    private fun swipeToDelete(recyclerView: RecyclerView){
+        val swipeToDeleteCallback = object :SwipeToDelete(){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val deletedItem =listToDoAdapter.dataToDoList[viewHolder.adapterPosition]
+                //delete item
+                toDoViewModel.deleteData(deletedItem)
+                //restore deleted item
+                restoreDeletedData(viewHolder.itemView,deletedItem,viewHolder.adapterPosition)
+            }
         }
-    }*/
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu,menu)
+    }
+
+    private fun restoreDeletedData(view:View, deletedItem: ToDoData,position: Int){
+        val snackBar = Snackbar.make(view,"Deleted '${deletedItem.title}'",Snackbar.LENGTH_LONG)
+        snackBar.setAction("Undo"){
+            toDoViewModel.insertData(deletedItem)
+            listToDoAdapter.notifyItemChanged(position)
+        }
+        snackBar.show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -89,7 +103,7 @@ class ListFragment : Fragment() {
     }
 
     private fun confirmClearAllData() {
-        Toast.makeText(requireContext(),"test Delete", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(),"test Delete", Toast.LENGTH_SHORT).show()
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") { _, _ ->

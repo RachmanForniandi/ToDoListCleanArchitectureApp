@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.item_to_do.view.*
 
 class ListToDoAdapter:RecyclerView.Adapter<ListToDoAdapter.ListToDoHolder>() {
 
-    private var dataToDoList = emptyList<ToDoData>()
+    var dataToDoList = emptyList<ToDoData>()
 
     class ListToDoHolder (private val binding:ItemToDoBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(toData: ToDoData){
