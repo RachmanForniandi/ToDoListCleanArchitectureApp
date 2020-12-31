@@ -16,6 +16,7 @@ import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
 import com.example.todolistcleanarchitectureapp.databinding.FragmentListBinding
 import com.example.todolistcleanarchitectureapp.utility.SwipeToDelete
 import com.google.android.material.snackbar.Snackbar
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
 class ListFragment : Fragment() {
 
@@ -64,7 +65,9 @@ class ListFragment : Fragment() {
         val rvToDo = binding?.listTodoData
         //rvToDo.layoutManager = LinearLayoutManager(requireActivity())
         rvToDo?.adapter = listToDoAdapter
-
+        rvToDo?.itemAnimator = SlideInUpAnimator().apply {
+            addDuration=300
+        }
         rvToDo?.let { swipeToDelete(it) }
     }
 
