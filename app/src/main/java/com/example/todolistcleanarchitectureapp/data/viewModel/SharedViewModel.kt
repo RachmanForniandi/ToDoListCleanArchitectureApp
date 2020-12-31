@@ -14,10 +14,14 @@ import com.example.todolistcleanarchitectureapp.data.ToDoData
 
 class SharedViewModel(application: Application):AndroidViewModel(application) {
 
-    val emptyDb: MutableLiveData<Boolean> = MutableLiveData(true)
+    /**=============================List Fragment =========================*/
+    val emptyDb: MutableLiveData<Boolean> = MutableLiveData(false)
+
     fun checkIfDatabaseEmpty(toDoData: List<ToDoData>){
         emptyDb.value = toDoData.isEmpty()
     }
+
+    /**=============================add/update Fragment =========================*/
     val listener:AdapterView.OnItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(p0: AdapterView<*>?) {}
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
