@@ -6,7 +6,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistcleanarchitectureapp.R
@@ -38,14 +37,13 @@ class ListFragment : Fragment() {
         binding?.sharedViewModel = sharedViewModel
         displayDataRecyclerView()
 
-        //rvToDo.layoutManager = LinearLayoutManager(requireActivity())
 
-        toDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
+
+        toDoViewModel.getAllData.observe(viewLifecycleOwner, {
             data ->
             sharedViewModel.checkIfDatabaseEmpty(data)
             listToDoAdapter.setData(data)
         })
-
         /*sharedViewModel.emptyDb.observe(viewLifecycleOwner, Observer {
             showEmptyDatabaseViews(it)
         })*/
@@ -64,6 +62,7 @@ class ListFragment : Fragment() {
 
     private fun displayDataRecyclerView() {
         val rvToDo = binding?.listTodoData
+        //rvToDo.layoutManager = LinearLayoutManager(requireActivity())
         rvToDo?.adapter = listToDoAdapter
 
         rvToDo?.let { swipeToDelete(it) }
@@ -75,27 +74,13 @@ class ListFragment : Fragment() {
                 val deletedItem =listToDoAdapter.dataToDoList[viewHolder.adapterPosition]
                 //delete item
                 toDoViewModel.deleteData(deletedItem)
-                listToDoAdapter.notifyItemRemoved(viewHolder.adapterPosition)
-                Toast.makeText(requireContext(), "Successfully Deleted: ${deletedItem.title}",
-                        Toast.LENGTH_SHORT
-                ).show()
                 //restore deleted item
-                //restoreDeletedData(viewHolder.itemView,deletedItem,viewHolder.adapterPosition)
+                restoreDeletedData(viewHolder.itemView,deletedItem,viewHolder.adapterPosition)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
-
-    /*private fun showEmptyDatabaseViews(emptyData:Boolean) {
-        if (emptyData){
-            view?.img_view_no_data?.visibility = View.VISIBLE
-            view?.tv_no_data?.visibility = View.VISIBLE
-        }else{
-            view?.img_view_no_data?.visibility = View.INVISIBLE
-            view?.tv_no_data?.visibility = View.INVISIBLE
-        }
-    }*/
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu,menu)
@@ -139,7 +124,5 @@ class ListFragment : Fragment() {
         super.onDestroyView()
         fragmentListBinding = null
     }
-
-
 
 }
