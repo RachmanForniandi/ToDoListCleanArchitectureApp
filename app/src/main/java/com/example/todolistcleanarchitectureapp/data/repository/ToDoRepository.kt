@@ -7,6 +7,8 @@ import com.example.todolistcleanarchitectureapp.data.ToDoData
 class ToDoRepository(private val toDoDao: ToDoDao) {
 
     val fetchAllData:LiveData<List<ToDoData>> = toDoDao.getAllDataTask()
+    val filterDataByHighPriority: LiveData<List<ToDoData>> = toDoDao.sortByHighPriority()
+    val filterDataByLowPriority: LiveData<List<ToDoData>> = toDoDao.sortByLowPriority()
 
     suspend fun insertData(toDoData: ToDoData){
         toDoDao.insertDataTask(toDoData)
@@ -27,4 +29,6 @@ class ToDoRepository(private val toDoDao: ToDoDao) {
     fun searchDataOnDatabase(searchQuery:String):LiveData<List<ToDoData>>{
         return toDoDao.searchDatabase(searchQuery)
     }
+
+
 }
