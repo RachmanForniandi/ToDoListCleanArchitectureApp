@@ -3,9 +3,11 @@ package com.example.todolistcleanarchitectureapp.fragments
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistcleanarchitectureapp.R
@@ -16,8 +18,9 @@ import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
 import com.example.todolistcleanarchitectureapp.databinding.FragmentListBinding
 import com.example.todolistcleanarchitectureapp.utility.SwipeToDelete
 import com.google.android.material.snackbar.Snackbar
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(),SearchView.OnQueryTextListener {
 
     private val toDoViewModel:ToDoViewModel by viewModels()
     private val sharedViewModel:SharedViewModel by viewModels()
@@ -64,7 +67,9 @@ class ListFragment : Fragment() {
         val rvToDo = binding?.listTodoData
         //rvToDo.layoutManager = LinearLayoutManager(requireActivity())
         rvToDo?.adapter = listToDoAdapter
-
+        rvToDo?.itemAnimator = SlideInUpAnimator().apply {
+            addDuration=300
+        }
         rvToDo?.let { swipeToDelete(it) }
     }
 
@@ -84,6 +89,12 @@ class ListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu,menu)
+
+        val search = menu.findItem(R.id.menu_search)
+
+        val searchView = search.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
     }
 
     private fun restoreDeletedData(view:View, deletedItem: ToDoData,position: Int){
@@ -100,6 +111,29 @@ class ListFragment : Fragment() {
             confirmClearAllData()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if(query != null){
+            searchOnDatabase(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if(query != null){
+            searchOnDatabase(query)
+        }
+        return true
+    }
+    private fun searchOnDatabase(query: String) {
+        val searchQuery = "%$query%"
+
+        toDoViewModel.searchData(searchQuery).observe(this, Observer {list ->
+            list.let {
+                listToDoAdapter.setData(it)
+            }
+        })
     }
 
     private fun confirmClearAllData() {
@@ -124,5 +158,7 @@ class ListFragment : Fragment() {
         super.onDestroyView()
         fragmentListBinding = null
     }
+
+
 
 }
