@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.todolistcleanarchitectureapp.R
 import com.example.todolistcleanarchitectureapp.adapter.ListToDoAdapter
 import com.example.todolistcleanarchitectureapp.data.ToDoData
@@ -16,6 +17,7 @@ import com.example.todolistcleanarchitectureapp.data.viewModel.SharedViewModel
 import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
 import com.example.todolistcleanarchitectureapp.databinding.FragmentListBinding
 import com.example.todolistcleanarchitectureapp.utility.SwipeToDelete
+import com.example.todolistcleanarchitectureapp.utility.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
@@ -57,7 +59,11 @@ class ListFragment : Fragment(),SearchView.OnQueryTextListener {
             findNavController().navigate(R.id.action_listFragment_to_updateFragment)
         }*/
 
+        //set menu
         setHasOptionsMenu(true)
+
+        //hide soft keyboard
+        hideKeyboard(requireActivity())
         return binding?.root
 
     }
@@ -65,7 +71,7 @@ class ListFragment : Fragment(),SearchView.OnQueryTextListener {
     private fun displayDataRecyclerView() {
         val rvToDo = binding?.listTodoData
         //rvToDo.layoutManager = LinearLayoutManager(requireActivity())
-        //rvToDo?.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        rvToDo?.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         rvToDo?.adapter = listToDoAdapter
         rvToDo?.itemAnimator = SlideInUpAnimator().apply {
             addDuration=300
