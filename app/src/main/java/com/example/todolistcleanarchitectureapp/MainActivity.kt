@@ -2,9 +2,7 @@ package com.example.todolistcleanarchitectureapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 
 class MainActivity : AppCompatActivity() {

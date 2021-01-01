@@ -1,15 +1,12 @@
 package com.example.todolistcleanarchitectureapp.fragments
 
-import android.icu.text.CaseMap
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todolistcleanarchitectureapp.R
-import com.example.todolistcleanarchitectureapp.data.Priority
 import com.example.todolistcleanarchitectureapp.data.ToDoData
 import com.example.todolistcleanarchitectureapp.data.viewModel.SharedViewModel
 import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel

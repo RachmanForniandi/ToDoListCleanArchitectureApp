@@ -7,7 +7,6 @@ import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistcleanarchitectureapp.R
@@ -66,6 +65,7 @@ class ListFragment : Fragment(),SearchView.OnQueryTextListener {
     private fun displayDataRecyclerView() {
         val rvToDo = binding?.listTodoData
         //rvToDo.layoutManager = LinearLayoutManager(requireActivity())
+        //rvToDo?.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         rvToDo?.adapter = listToDoAdapter
         rvToDo?.itemAnimator = SlideInUpAnimator().apply {
             addDuration=300
@@ -107,8 +107,10 @@ class ListFragment : Fragment(),SearchView.OnQueryTextListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_delete_all){
-            confirmClearAllData()
+        when(item.itemId){
+            R.id.menu_delete_all ->confirmClearAllData()
+            R.id.menu_priority_high -> toDoViewModel.sortingByHighPriority.observe(this, { listToDoAdapter.setData(it) })
+            R.id.menu_priority_low -> toDoViewModel.sortingByLowPriority.observe(this, { listToDoAdapter.setData(it) })
         }
         return super.onOptionsItemSelected(item)
     }
@@ -129,7 +131,7 @@ class ListFragment : Fragment(),SearchView.OnQueryTextListener {
     private fun searchOnDatabase(query: String) {
         val searchQuery = "%$query%"
 
-        toDoViewModel.searchData(searchQuery).observe(this, Observer {list ->
+        toDoViewModel.searchData(searchQuery).observe(this,  {list ->
             list.let {
                 listToDoAdapter.setData(it)
             }

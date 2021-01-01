@@ -9,14 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolistcleanarchitectureapp.R
-import com.example.todolistcleanarchitectureapp.data.Priority
 import com.example.todolistcleanarchitectureapp.data.ToDoData
 import com.example.todolistcleanarchitectureapp.data.viewModel.SharedViewModel
 import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
 import com.example.todolistcleanarchitectureapp.databinding.FragmentUpdateBinding
-import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_update.*
-import kotlinx.android.synthetic.main.fragment_update.view.*
 
 
 class UpdateFragment : Fragment() {
