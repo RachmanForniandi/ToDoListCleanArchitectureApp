@@ -1,18 +1,14 @@
 package com.example.todolistcleanarchitectureapp.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistcleanarchitectureapp.R
 import com.example.todolistcleanarchitectureapp.data.Priority
 import com.example.todolistcleanarchitectureapp.data.ToDoData
 import com.example.todolistcleanarchitectureapp.databinding.ItemToDoBinding
-import com.example.todolistcleanarchitectureapp.fragments.ListFragmentDirections
 import com.example.todolistcleanarchitectureapp.utility.ToDoDiffUtil
 import kotlinx.android.synthetic.main.item_to_do.view.*
 
