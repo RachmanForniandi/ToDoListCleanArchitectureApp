@@ -1,20 +1,16 @@
 package com.example.todolistcleanarchitectureapp.fragments
 
-import android.icu.text.CaseMap
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todolistcleanarchitectureapp.R
-import com.example.todolistcleanarchitectureapp.data.Priority
 import com.example.todolistcleanarchitectureapp.data.ToDoData
 import com.example.todolistcleanarchitectureapp.data.viewModel.SharedViewModel
 import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
-import kotlinx.android.synthetic.main.fragment_add.*
-import kotlinx.android.synthetic.main.fragment_add.view.*
+import com.example.todolistcleanarchitectureapp.databinding.FragmentAddBinding
 
 
 class AddFragment : Fragment() {
@@ -22,18 +18,22 @@ class AddFragment : Fragment() {
     private val todoViewModel:ToDoViewModel by viewModels()
     private val sharedViewModel:SharedViewModel by viewModels()
 
+    private var fragmentAddBinding: FragmentAddBinding? = null
+    private val binding get() = fragmentAddBinding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view =inflater.inflate(R.layout.fragment_add, container, false)
+        fragmentAddBinding =
+            FragmentAddBinding.inflate(layoutInflater, container, false)
 
         setHasOptionsMenu(true)
 
-        view.sp_priority.onItemSelectedListener = sharedViewModel.listener
+        binding.spPriority.onItemSelectedListener = sharedViewModel.listener
 
-        return view
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -48,9 +48,9 @@ class AddFragment : Fragment() {
     }
 
     private fun insertToLocalDb() {
-        val inputTitle = et_title.text.toString()
-        val inputPriority = sp_priority.selectedItem.toString()
-        val inputDescription = et_description_multiline.text.toString()
+        val inputTitle = binding.etTitle.text.toString()
+        val inputPriority = binding.spPriority.selectedItem.toString()
+        val inputDescription = binding.etDescriptionMultiline.text.toString()
 
         val validationInputData = sharedViewModel.verifyInputFromUser(inputTitle,inputDescription)
 
@@ -81,6 +81,9 @@ class AddFragment : Fragment() {
         }
     }*/
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentAddBinding = null
+    }
 
 }

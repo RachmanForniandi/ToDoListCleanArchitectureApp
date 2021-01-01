@@ -9,14 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolistcleanarchitectureapp.R
-import com.example.todolistcleanarchitectureapp.data.Priority
 import com.example.todolistcleanarchitectureapp.data.ToDoData
 import com.example.todolistcleanarchitectureapp.data.viewModel.SharedViewModel
 import com.example.todolistcleanarchitectureapp.data.viewModel.ToDoViewModel
 import com.example.todolistcleanarchitectureapp.databinding.FragmentUpdateBinding
-import kotlinx.android.synthetic.main.fragment_add.*
-import kotlinx.android.synthetic.main.fragment_update.*
-import kotlinx.android.synthetic.main.fragment_update.view.*
+
 
 
 class UpdateFragment : Fragment() {
@@ -26,24 +23,24 @@ class UpdateFragment : Fragment() {
     private val mTodoViewModel:ToDoViewModel by viewModels()
 
     private var fragmentUpdateBinding:FragmentUpdateBinding?= null
-    private val binding get() = fragmentUpdateBinding
+    private val binding get() = fragmentUpdateBinding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         fragmentUpdateBinding = FragmentUpdateBinding.inflate(inflater, container, false)
         //val view =inflater.inflate(R.layout.fragment_update, container, false)
-        binding?.argsUpdate = args
+        binding.argsUpdate = args
         setHasOptionsMenu(true)
 
        /* fragmentUpdateBinding.updateEtTitle.setText(args.currentItem.title)
         view.update_et_description_multiline.setText(args.currentItem.description)
         view.update_sp_priority.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))*/
-        binding?.updateSpPriority?.onItemSelectedListener = mSharedViewModel.listener
+        binding.updateSpPriority.onItemSelectedListener = mSharedViewModel.listener
 
-        return binding?.root
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -59,9 +56,9 @@ class UpdateFragment : Fragment() {
     }
 
     private fun updateDataItem() {
-        val updateTitle = update_et_title.text.toString()
-        val updatePriority = update_sp_priority.selectedItem.toString()
-        val updateDescription = update_et_description_multiline.text.toString()
+        val updateTitle = binding.updateEtTitle.text.toString()
+        val updatePriority = binding.updateSpPriority.selectedItem.toString()
+        val updateDescription = binding.updateEtDescriptionMultiline.text.toString()
 
         val validation = mSharedViewModel.verifyInputFromUser(updateTitle,updateDescription)
 

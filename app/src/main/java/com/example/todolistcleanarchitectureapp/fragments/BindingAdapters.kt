@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.Spinner
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
@@ -12,7 +11,6 @@ import com.example.todolistcleanarchitectureapp.R
 import com.example.todolistcleanarchitectureapp.data.Priority
 import com.example.todolistcleanarchitectureapp.data.ToDoData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.item_to_do.view.*
 
 class BindingAdapters {
 
@@ -21,7 +19,9 @@ class BindingAdapters {
         @JvmStatic
         fun navigateToAddFragment(view:FloatingActionButton, navigate: Boolean){
             view.setOnClickListener {
-                view.findNavController().navigate(R.id.action_listFragment_to_addFragment)
+                if (navigate){
+                    view.findNavController().navigate(R.id.action_listFragment_to_addFragment)
+                }
             }
         }
 
